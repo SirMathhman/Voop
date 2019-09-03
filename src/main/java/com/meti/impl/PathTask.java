@@ -17,16 +17,20 @@ public abstract class PathTask implements Task {
     @Override
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
         try {
-            ensure(ROOT);
+            ensure(ROOT, true);
             return runImpl(state);
         } catch (IOException e) {
             return Task.completeExceptionally(e);
         }
     }
 
-    Path ensure(Path path) throws IOException {
+    Path ensure(Path path, boolean isDirectory) throws IOException {
         if (!Files.exists(path)) {
-            Files.createDirectory(path);
+            if(isDirectory) {
+                Files.createDirectory(path);
+            } else{
+                Files.createFile(path);
+            }
         }
         return path;
     }

@@ -1,5 +1,7 @@
 package com.meti.impl;
 
 enum GenerateType {
-    COMPILE, SOURCE
+    COMPILE,
+    SOURCE,
+    MANIFEST
 }

@@ -1,6 +1,5 @@
 package com.meti.impl;
 
-import com.meti.Binding;
 import com.meti.State;
 import com.meti.task.NamedTask;
 import com.meti.task.SimpleTaskResponse;
@@ -15,7 +14,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class CompileTask implements NamedTask {
     @Override
@@ -25,12 +26,6 @@ public class CompileTask implements NamedTask {
 
     @Override
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
-        Binding<Path> compiled = state.getCompiled();
-        if (compiled.isEmpty()) {
-            state.run(state, "generate source");
-            state.run(state, "generate compile");
-        }
-
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
@@ -41,7 +36,9 @@ public class CompileTask implements NamedTask {
         List<File> sources = new ArrayList<>();
         for (Path source : state.getSources()) {
             try {
-                Files.walk(source).filter(path -> Files.isRegularFile(path))
+                Files.walk(source)
+                        .filter(path -> Files.isRegularFile(path))
+                        .filter(path -> path.toString().endsWith(".java"))
                         .map(Path::toFile)
                         .forEach(sources::add);
             } catch (IOException e) {
@@ -63,6 +60,28 @@ public class CompileTask implements NamedTask {
                         diagnostic.getSource().toUri());
             }
         }
+        for (Path source : state.getSources()) {
+            try {
+                copy(source.resolve("resources"), state.getCompiled().get());
+            } catch (IOException e) {
+                return Task.completeExceptionally(e);
+            }
+        }
         return Task.complete(new SimpleTaskResponse("Compilation performed successfully."));
+    }
+
+    private void copy(Path from, Path to) throws IOException {
+        if (!Files.exists(to)) {
+            Files.copy(from, to);
+        }
+
+        for (Path path : Files.list(from).collect(Collectors.toSet())) {
+            Path copyPath = to.resolve(path.getFileName());
+            if(Files.isDirectory(path)){
+                copy(path, copyPath);
+            } else {
+                Files.copy(path, copyPath);
+            }
+        }
     }
 }

@@ -32,6 +32,7 @@ class Console {
         manager.add(new CleanTask());
         manager.add(new CompileTask());
         manager.add(new RunTask());
+        manager.add(new PackageTask());
         manager.add(new ExitTask());
     }
 

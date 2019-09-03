@@ -12,7 +12,7 @@ class OutTask extends PathTask {
     @Override
     CompletableFuture<TaskResponse> runImpl(State state) {
         try {
-            state.getCompiled().set(ensure(ROOT.resolve("compile")));
+            state.getCompiled().set(ensure(ROOT.resolve("compile"), true));
             return Task.complete(new SimpleTaskResponse("Generated compile directory."));
         } catch (IOException e) {
             return Task.completeExceptionally(e);

@@ -15,7 +15,7 @@ public class SimpleState implements State {
     private final Set<Path> sources = new HashSet<>();
     private final Set<Path> tests = new HashSet<>();
 
-    public SimpleState(TaskRunner manager) {
+    SimpleState(TaskRunner manager) {
         this.manager = manager;
     }
 
