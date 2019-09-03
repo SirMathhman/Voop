@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -84,7 +85,8 @@ public class WrappedCompiler implements VoopCompiler {
                 .stream()
                 .map(diagnostic -> "Error on line " +
                         diagnostic.getLineNumber() + " in " +
-                        diagnostic.getSource().toUri())
+                        diagnostic.getSource().toUri() + " " +
+                        diagnostic.getMessage(Locale.ENGLISH) + "\n")
                 .collect(Collectors.joining());
     }
 }
