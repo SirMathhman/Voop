@@ -26,6 +26,9 @@ public class CompileTask implements NamedTask {
 
     @Override
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
+        state.run("generate source");
+        state.run("generate compile");
+
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);

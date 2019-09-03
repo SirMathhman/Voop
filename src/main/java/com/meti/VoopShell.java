@@ -13,13 +13,13 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Console {
+class VoopShell {
     private final Logger logger = Logger.getAnonymousLogger();
     private final TaskManager manager = new SetTaskManager();
     private final State state = new SimpleState(manager);
 
     public static void main(String[] args) {
-        new Console().run();
+        new VoopShell().run();
     }
 
     private void run() {
