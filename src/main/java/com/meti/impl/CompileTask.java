@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -83,7 +82,9 @@ public class CompileTask implements NamedTask {
             if(Files.isDirectory(path)){
                 copy(path, copyPath);
             } else {
-                Files.delete(copyPath);
+                if (Files.exists(copyPath)) {
+                    Files.delete(copyPath);
+                }
                 Files.copy(path, copyPath);
             }
         }

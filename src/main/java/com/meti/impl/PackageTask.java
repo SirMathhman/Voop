@@ -21,7 +21,7 @@ public class PackageTask implements NamedTask {
         state.run("compile");
 
         try {
-            Process process = new ProcessBuilder("jar", "cmvf", "META-INF/MANIFEST.MF", command.get(), "*")
+            Process process = new ProcessBuilder("jar", "cmf", "META-INF/MANIFEST.MF", command.get(), "*")
                     .directory(state.getCompiled().get().toFile())
                     .inheritIO()
                     .start();

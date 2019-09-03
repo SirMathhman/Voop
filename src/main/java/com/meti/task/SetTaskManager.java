@@ -38,7 +38,7 @@ public class SetTaskManager implements TaskManager {
         public String get() {
             String next = args.poll();
             if(next == null){
-                throw new TaskException("Not enough arguments.");
+                throw new IllegalArgumentException("Not enough arguments.");
             }
             return next;
         }
