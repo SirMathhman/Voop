@@ -10,7 +10,7 @@ public interface State extends TaskRunner {
 
     Set<Path> getSourceDirectories();
 
-    Set<Path> getTests();
+    Set<Path> getTestDirectories();
 
     default void run(String command) {
         run(this, command);

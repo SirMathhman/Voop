@@ -12,13 +12,25 @@ import java.util.concurrent.CompletableFuture;
 class SourceTask extends PathTask {
     @Override
     CompletableFuture<TaskResponse> runImpl(State state) throws IOException {
-        Path source = ensure(ROOT.resolve("src"), true);
+        Path sourceDirectory = ensure(ROOT.resolve("src"), true);
+        state.getSourceDirectories().add(ensureMain(sourceDirectory));
+        state.getTestDirectories().add(ensureTest(sourceDirectory));
+        return Task.complete(new SimpleTaskResponse("Generated directories."));
+    }
+
+    private Path ensureMain(Path source) throws IOException {
         Path main = source.resolve("main");
-        state.getSourceDirectories().add(ensureContent(main));
-        Path metaDirectory = ensure(main.resolve("resources").resolve("META-INF"), true);
+        ensureManifest(main);
+        return ensureContent(main);
+    }
+
+    private Path ensureTest(Path source) throws IOException {
+        return ensureContent(source.resolve("test"));
+    }
+
+    private void ensureManifest(Path directory) throws IOException {
+        Path metaDirectory = ensure(directory.resolve("resources").resolve("META-INF"), true);
         ensure(metaDirectory.resolve("MANIFEST.MF"), false);
-        state.getTests().add(ensureContent(source.resolve("test")));
-        return Task.complete(new SimpleTaskResponse("Generated source directories."));
     }
 
     private Path ensureContent(Path path) throws IOException {

@@ -30,7 +30,7 @@ public class SimpleState implements State {
     }
 
     @Override
-    public Set<Path> getTests() {
+    public Set<Path> getTestDirectories() {
         return tests;
     }
 
