@@ -38,7 +38,7 @@ public class CleanTask implements NamedTask {
 
     @Override
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
-        Binding<Path> compiled = state.getCompiled();
+        Binding<Path> compiled = state.getCompilationDirectory();
         if (compiled.isEmpty()) state.run(state, "compile");
         try {
             delete(compiled.get());

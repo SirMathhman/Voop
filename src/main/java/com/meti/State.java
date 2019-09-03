@@ -6,9 +6,9 @@ import java.nio.file.Path;
 import java.util.Set;
 
 public interface State extends TaskRunner {
-    Binding<Path> getCompiled();
+    Binding<Path> getCompilationDirectory();
 
-    Set<Path> getSources();
+    Set<Path> getSourceDirectories();
 
     Set<Path> getTests();
 

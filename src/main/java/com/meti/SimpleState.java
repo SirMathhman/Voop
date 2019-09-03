@@ -20,12 +20,12 @@ public class SimpleState implements State {
     }
 
     @Override
-    public Binding<Path> getCompiled() {
+    public Binding<Path> getCompilationDirectory() {
         return compiled;
     }
 
     @Override
-    public Set<Path> getSources() {
+    public Set<Path> getSourceDirectories() {
         return sources;
     }
 

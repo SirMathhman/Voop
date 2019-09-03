@@ -22,7 +22,7 @@ public class PackageTask implements NamedTask {
 
         try {
             Process process = new ProcessBuilder("jar", "cmf", "META-INF/MANIFEST.MF", command.get(), "*")
-                    .directory(state.getCompiled().get().toFile())
+                    .directory(state.getCompilationDirectory().get().toFile())
                     .inheritIO()
                     .start();
             process.waitFor();

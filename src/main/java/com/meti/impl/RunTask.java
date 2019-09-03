@@ -18,13 +18,13 @@ public class RunTask implements NamedTask {
 
     @Override
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
-        if (state.getCompiled().isEmpty()) state.run(state, "compile");
+        if (state.getCompilationDirectory().isEmpty()) state.run(state, "compile");
 
         try {
             String mainClass = command.get();
             Process process = new ProcessBuilder("java", mainClass)
                     .inheritIO()
-                    .directory(state.getCompiled().get().toFile())
+                    .directory(state.getCompilationDirectory().get().toFile())
                     .start();
             process.waitFor();
             return Task.complete(new SimpleTaskResponse("Successfully ran program."));

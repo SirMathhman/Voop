@@ -14,7 +14,7 @@ class SourceTask extends PathTask {
     CompletableFuture<TaskResponse> runImpl(State state) throws IOException {
         Path source = ensure(ROOT.resolve("src"), true);
         Path main = source.resolve("main");
-        state.getSources().add(ensureContent(main));
+        state.getSourceDirectories().add(ensureContent(main));
         Path metaDirectory = ensure(main.resolve("resources").resolve("META-INF"), true);
         ensure(metaDirectory.resolve("MANIFEST.MF"), false);
         state.getTests().add(ensureContent(source.resolve("test")));
