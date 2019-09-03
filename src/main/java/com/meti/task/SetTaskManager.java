@@ -2,7 +2,10 @@ package com.meti.task;
 
 import com.meti.State;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
@@ -17,14 +20,21 @@ public class SetTaskManager implements TaskManager {
 
     @Override
     public Optional<CompletableFuture<TaskResponse>> run(State state, String line) {
+        if (line.isBlank()) return Optional.empty();
         List<String> args = List.of(line.split(" "));
-        Supplier<String> subArgs = new QueueSupplier(new LinkedList<>(args.subList(1, args.size())));
-        if (args.size() == 0) {
-            return Optional.empty();
-        }
+        Supplier<String> argumentSupplier = buildArgumentSupplier(args);
+        return evaluate(state, args.get(0), argumentSupplier);
+    }
+
+    private Supplier<String> buildArgumentSupplier(List<String> args) {
+        List<String> subArgs = args.subList(1, args.size());
+        return new QueueSupplier(subArgs);
+    }
+
+    private Optional<CompletableFuture<TaskResponse>> evaluate(State state, String name, Supplier<String> supplier) {
         return tasks.stream()
-                .filter(task -> task.getName().equals(args.get(0)))
-                .map(task -> task.run(state, subArgs))
+                .filter(task -> task.getName().equals(name))
+                .map(task -> task.run(state, supplier))
                 .findAny();
     }
 }
