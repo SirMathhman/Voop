@@ -10,19 +10,25 @@ import com.meti.task.TaskResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class CleanTask implements NamedTask {
     private void delete(Path compileDirectory) throws IOException {
-        for (Path path : Files.list(compileDirectory).collect(Collectors.toSet())) {
-            if (Files.isDirectory(path)) {
-                delete(path);
-            }
-            Files.delete(path);
+        if(Files.isDirectory(compileDirectory)){
+            Set<Path> children = Files.list(compileDirectory)
+                    .collect(Collectors.toSet());
+            deleteChildren(children);
         }
         Files.delete(compileDirectory);
+    }
+
+    private void deleteChildren(Set<Path> children) throws IOException {
+        for (Path path : children) {
+            delete(path);
+        }
     }
 
     @Override
@@ -35,8 +41,7 @@ public class CleanTask implements NamedTask {
         Binding<Path> compiled = state.getCompiled();
         if (compiled.isEmpty()) state.run(state, "compile");
         try {
-            Path compileDirectory = compiled.get();
-            delete(compileDirectory);
+            delete(compiled.get());
             return Task.complete(new SimpleTaskResponse("Cleaned directory."));
         } catch (IOException e) {
             return Task.completeExceptionally(e);
