@@ -28,12 +28,12 @@ class VoopShell {
     }
 
     private void init() {
-        manager.add(new GenerateTask());
-        manager.add(new CleanTask());
-        manager.add(new CompileTask());
-        manager.add(new RunTask());
-        manager.add(new PackageTask());
-        manager.add(new ExitTask());
+        manager.add(new GenerateTask())
+                .add(new CleanTask())
+                .add(new CompileTask())
+                .add(new RunTask())
+                .add(new PackageTask())
+                .add(new ExitTask());
     }
 
     private void waitForTermination() {

@@ -10,8 +10,9 @@ public class SetTaskManager implements TaskManager {
     private final Set<NamedTask> tasks = new HashSet<>();
 
     @Override
-    public void add(NamedTask task) {
+    public TaskManager add(NamedTask task) {
         tasks.add(task);
+        return this;
     }
 
     @Override
