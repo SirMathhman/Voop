@@ -7,8 +7,12 @@ import com.meti.task.Task;
 import com.meti.task.TaskResponse;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class PackageTask implements NamedTask {
     @Override
@@ -21,14 +25,30 @@ public class PackageTask implements NamedTask {
         state.run("compile");
 
         try {
-            Process process = new ProcessBuilder("jar", "cmf", "META-INF/MANIFEST.MF", command.get(), "*")
-                    .directory(state.getCompilationDirectory().get().toFile())
-                    .inheritIO()
-                    .start();
-            process.waitFor();
+            Path compilationDirectory = state.getCompilationDirectory().get();
+            removePreviousJARs(compilationDirectory);
+            packageExceptionally(compilationDirectory, command.get());
             return Task.complete(new SimpleTaskResponse("Built JAR."));
         } catch (IOException | InterruptedException e) {
             return Task.completeExceptionally(e);
         }
+    }
+
+    private void removePreviousJARs(Path compilationDirectory) throws IOException {
+        Set<Path> jarFiles = Files.list(compilationDirectory)
+                .filter(path -> path.endsWith(".jar"))
+                .collect(Collectors.toSet());
+        for (Path jarFile : jarFiles) {
+            Files.delete(jarFile);
+        }
+    }
+
+    private void packageExceptionally(Path compilationDirectory, String fileName) throws IOException,
+            InterruptedException {
+        new ProcessBuilder("jar", "cmf", "META-INF/MANIFEST.MF", fileName, "*")
+                .directory(compilationDirectory.toFile())
+                .inheritIO()
+                .start()
+                .waitFor();
     }
 }
