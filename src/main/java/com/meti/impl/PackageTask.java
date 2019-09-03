@@ -18,7 +18,8 @@ public class PackageTask implements NamedTask {
 
     @Override
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
-        //jar cmvf META-INF/MANIFEST.MF <new-jar-filename>.jar
+        state.run("compile");
+
         try {
             Process process = new ProcessBuilder("jar", "cmvf", "META-INF/MANIFEST.MF", command.get(), "*")
                     .directory(state.getCompiled().get().toFile())
