@@ -34,6 +34,9 @@ class VoopShell {
                 .add(new RunTask())
                 .add(new PackageTask())
                 .add(new ExitTask());
+        manager.run(state, "generate meta").ifPresent(this::evaluate);
+        manager.run(state, "generate configuration").ifPresent(this::evaluate);
+        manager.run(state, "generate dependencies").ifPresent(this::evaluate);
     }
 
     private void waitForTermination() {
@@ -47,15 +50,6 @@ class VoopShell {
     }
 
     private boolean evaluate(String line) {
-        try {
-            return evaluateExceptionally(line);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Failed to execute task: " + line, e);
-            return false;
-        }
-    }
-
-    private boolean evaluateExceptionally(String line) throws Exception {
         var result = manager.run(state, line);
         if (result.isEmpty()) {
             logger.log(Level.WARNING, "Could not parse: " + line);
@@ -65,7 +59,16 @@ class VoopShell {
         }
     }
 
-    private boolean evaluate(CompletableFuture<TaskResponse> result) throws InterruptedException,
+    private boolean evaluate(CompletableFuture<TaskResponse> line) {
+        try {
+            return evaluateFuture(line);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to execute task: " + line, e);
+            return false;
+        }
+    }
+
+    private boolean evaluateFuture(CompletableFuture<TaskResponse> result) throws InterruptedException,
             ExecutionException, TimeoutException {
         TaskResponse response = result.get(1, TimeUnit.SECONDS);
         logger.log(Level.INFO, response.getMessage());

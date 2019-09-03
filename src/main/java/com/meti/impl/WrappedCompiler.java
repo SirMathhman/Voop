@@ -1,6 +1,7 @@
 package com.meti.impl;
 
 import com.meti.Binding;
+import com.meti.SimpleBinding;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
@@ -18,12 +19,16 @@ import static java.nio.file.Files.isRegularFile;
 import static java.nio.file.Files.walk;
 import static javax.tools.ToolProvider.getSystemJavaCompiler;
 
-class WrappedCompiler implements VoopCompiler {
+public class WrappedCompiler implements VoopCompiler {
     private final Binding<Path> compilationDirectory;
     private final DiagnosticCollector<JavaFileObject> diagnostics;
     private final StandardJavaFileManager fileManager;
     private final JavaCompiler internalCompiler = getSystemJavaCompiler();
     private final Set<Path> sourceDirectories;
+
+    WrappedCompiler(Path compilationDirectory, Set<Path> sources) {
+        this(new SimpleBinding<>(compilationDirectory), sources);
+    }
 
     WrappedCompiler(Binding<Path> compilationDirectory, Set<Path> sources) {
         this.diagnostics = new DiagnosticCollector<>();

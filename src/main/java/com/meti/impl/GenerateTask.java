@@ -4,6 +4,9 @@ import com.meti.task.Task;
 
 import java.util.Map;
 
+import static com.meti.impl.GenerateType.*;
+import static com.meti.impl.GenerateType.DEPENDENCIES;
+
 public class GenerateTask extends EnumeratedTask {
     @Override
     protected Class<GenerateType> getEnumClass() {
@@ -12,8 +15,11 @@ public class GenerateTask extends EnumeratedTask {
 
     @Override
     protected void putTasks(Map<GenerateType, Task> tasks) {
-        tasks.put(GenerateType.SOURCE, new SourceTask());
-        tasks.put(GenerateType.COMPILE, new OutTask());
+        tasks.put(SOURCE, new SourceTask());
+        tasks.put(COMPILE, new OutTask());
+        tasks.put(META, new MetaTask());
+        tasks.put(CONFIGURATION, new ConfigurationTask());
+        tasks.put(DEPENDENCIES, new DependencyTask());
     }
 
     @Override
