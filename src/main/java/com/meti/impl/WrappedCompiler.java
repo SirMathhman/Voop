@@ -19,11 +19,11 @@ import static java.nio.file.Files.walk;
 import static javax.tools.ToolProvider.getSystemJavaCompiler;
 
 class WrappedCompiler implements VoopCompiler {
-    private Binding<Path> compilationDirectory;
-    private DiagnosticCollector<JavaFileObject> diagnostics;
-    private StandardJavaFileManager fileManager;
-    private JavaCompiler internalCompiler = getSystemJavaCompiler();
-    private Set<Path> sourceDirectories;
+    private final Binding<Path> compilationDirectory;
+    private final DiagnosticCollector<JavaFileObject> diagnostics;
+    private final StandardJavaFileManager fileManager;
+    private final JavaCompiler internalCompiler = getSystemJavaCompiler();
+    private final Set<Path> sourceDirectories;
 
     WrappedCompiler(Binding<Path> compilationDirectory, Set<Path> sources) {
         this.diagnostics = new DiagnosticCollector<>();
