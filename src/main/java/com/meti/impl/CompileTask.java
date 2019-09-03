@@ -83,6 +83,7 @@ public class CompileTask implements NamedTask {
             if(Files.isDirectory(path)){
                 copy(path, copyPath);
             } else {
+                Files.delete(copyPath);
                 Files.copy(path, copyPath);
             }
         }
