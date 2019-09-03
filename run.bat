@@ -1,1 +1,0 @@
-"C:\Program Files\Java\jdk-12.0.1\bin\java.exe" -Dfile.encoding=windows-1252 -jar C:\Users\mathm\Organizations\Meticuli\projects\Voop\Voop.jar
