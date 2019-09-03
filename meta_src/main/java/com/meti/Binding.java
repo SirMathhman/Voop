@@ -5,7 +5,5 @@ public interface Binding<V> {
 
     boolean isEmpty();
 
-    boolean isPresent();
-
-    V set(V other);
+    void set(V other);
 }

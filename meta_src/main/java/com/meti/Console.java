@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Console {
+class Console {
     private final Logger logger = Logger.getAnonymousLogger();
     private final TaskManager manager = new SetTaskManager();
     private final State state = new SimpleState(manager);

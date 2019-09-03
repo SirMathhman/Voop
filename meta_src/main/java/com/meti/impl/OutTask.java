@@ -7,11 +7,10 @@ import com.meti.task.TaskResponse;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 class OutTask extends PathTask {
     @Override
-    CompletableFuture<TaskResponse> runImpl(State state, Supplier<String> command) {
+    CompletableFuture<TaskResponse> runImpl(State state) {
         try {
             state.getCompiled().set(ensure(ROOT.resolve("compile")));
             return Task.complete(new SimpleTaskResponse("Generated compile directory."));

@@ -3,14 +3,6 @@ package com.meti;
 public class SimpleBinding<V> implements Binding<V> {
     private V value;
 
-    public SimpleBinding() {
-        this(null);
-    }
-
-    public SimpleBinding(V value) {
-        this.value = value;
-    }
-
     @Override
     public V get() {
         return value;
@@ -22,14 +14,7 @@ public class SimpleBinding<V> implements Binding<V> {
     }
 
     @Override
-    public boolean isPresent() {
-        return !isEmpty();
-    }
-
-    @Override
-    public V set(V other) {
-        V old = this.value;
+    public void set(V other) {
         this.value = other;
-        return old;
     }
 }

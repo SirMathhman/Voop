@@ -8,11 +8,10 @@ import com.meti.task.TaskResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 class SourceTask extends PathTask {
     @Override
-    CompletableFuture<TaskResponse> runImpl(State state, Supplier<String> command) throws IOException {
+    CompletableFuture<TaskResponse> runImpl(State state) throws IOException {
         Path source = ensure(ROOT.resolve("src"));
         state.getSources().add(ensureContent(source.resolve("main")));
         state.getTests().add(ensureContent(source.resolve("test")));

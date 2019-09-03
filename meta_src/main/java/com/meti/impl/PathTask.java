@@ -18,7 +18,7 @@ public abstract class PathTask implements Task {
     public CompletableFuture<TaskResponse> run(State state, Supplier<String> command) {
         try {
             ensure(ROOT);
-            return runImpl(state, command);
+            return runImpl(state);
         } catch (IOException e) {
             return Task.completeExceptionally(e);
         }
@@ -31,5 +31,5 @@ public abstract class PathTask implements Task {
         return path;
     }
 
-    abstract CompletableFuture<TaskResponse> runImpl(State state, Supplier<String> command) throws IOException;
+    abstract CompletableFuture<TaskResponse> runImpl(State state) throws IOException;
 }
